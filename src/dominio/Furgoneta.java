@@ -8,12 +8,10 @@ public class Furgoneta extends Vehiculo {
         this.capacidadM3 = capacidadM3;
     }
 
-    @Override
     public double calcularPrecioFinal() {
         return getPrecioBase() * 0.5 * Math.cbrt(capacidadM3);
     }
 
-    @Override
     public String toString() {
         return super.toString() + ", Capacidad en m3: " + capacidadM3;
     }

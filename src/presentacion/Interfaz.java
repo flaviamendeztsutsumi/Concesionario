@@ -12,7 +12,7 @@ public class Interfaz {
     }
 
     public void menuPrincipal() {
-        System.out.println("========= Menú ========================");
+        System.out.println("=========       Menú       ============");
         System.out.println("|1. Agregar Vehículo de Turismo       |");
         System.out.println("|2. Agregar Furgoneta                 |");
         System.out.println("|3. Mostrar Vehículos de concesionario|");
