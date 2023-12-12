@@ -1,14 +1,25 @@
 package presentacion;
 import dominio.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class Interfaz {
+public class Interfaz implements Serializable{
     private Concesionario concesionario;
     private Scanner scanner;
+    
 
     public Interfaz() {
         concesionario = new Concesionario();
         scanner = new Scanner(System.in);
+        
+
     }
 
     public void menuPrincipal() {
@@ -22,6 +33,7 @@ public class Interfaz {
     }
 
     public void iniciar() {
+        leer();
         boolean continuar = true;
 
         while (continuar) {
@@ -37,6 +49,8 @@ public class Interfaz {
             } else if ("4".equals(opcion)) {
                 calcularPrecioTotal();
             } else if ("5".equals(opcion)) {
+                leer();
+                grabar();
                 continuar = false;
             } else {
                 System.out.println("La opción que has elegido no esxiste.");
@@ -89,6 +103,34 @@ public class Interfaz {
     public void calcularPrecioTotal() {
         double precioTotal = concesionario.calcularPrecioTotal();
         System.out.println("El precio total de los vehículos del concesionario es: " + precioTotal);
+    }
+
+    public void grabar()
+    {
+        try (ObjectOutputStream obj = new ObjectOutputStream(new FileOutputStream("concesionario.dat"))) {
+            obj.writeObject(concesionario);
+            System.out.println("El concesionario se ha grabado correctamente.");
+        } catch (IOException e) {
+            System.out.println("Error al grabar el concesionario: " + e.getMessage());
+        }
+    }
+    
+
+    private void leer() {
+        ObjectInputStream obj;
+        File file = new File("Concesionario.txt");
+        try {
+            obj = new ObjectInputStream(new FileInputStream(file));
+            try {
+                concesionario = (Concesionario) obj.readObject();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            obj.close();
+            System.out.println("Leído");
+        } catch (Exception e) {
+            System.out.println("No leído");
+        }
     }
 
 }
