@@ -18,7 +18,7 @@ public class Interfaz implements Serializable{
     public Interfaz() {
         concesionario = new Concesionario();
         scanner = new Scanner(System.in);
-        
+        leer();
 
     }
 
@@ -33,7 +33,6 @@ public class Interfaz implements Serializable{
     }
 
     public void iniciar() {
-        leer();
         boolean continuar = true;
 
         while (continuar) {
@@ -49,14 +48,16 @@ public class Interfaz implements Serializable{
             } else if ("4".equals(opcion)) {
                 calcularPrecioTotal();
             } else if ("5".equals(opcion)) {
-                leer();
                 grabar();
                 continuar = false;
             } else {
-                System.out.println("La opción que has elegido no esxiste.");
+                System.out.println("La opción que has elegido no existe.");
             }
         }
     }
+
+
+    
 
     public void agregarVehiculoTurismo() {
         System.out.print("Marca del vehículo que quieres añadir: ");
@@ -105,31 +106,27 @@ public class Interfaz implements Serializable{
         System.out.println("El precio total de los vehículos del concesionario es: " + precioTotal);
     }
 
-    public void grabar()
-    {
+    public void grabar() {
         try (ObjectOutputStream obj = new ObjectOutputStream(new FileOutputStream("concesionario.dat"))) {
             obj.writeObject(concesionario);
-            System.out.println("El concesionario se ha grabado correctamente.");
+            System.out.println("Concesionario grabado correctamente.");
         } catch (IOException e) {
             System.out.println("Error al grabar el concesionario: " + e.getMessage());
         }
     }
-    
 
     private void leer() {
-        ObjectInputStream obj;
-        File file = new File("Concesionario.txt");
-        try {
-            obj = new ObjectInputStream(new FileInputStream(file));
-            try {
+        File file = new File("concesionario.dat");
+
+        if (file.exists()) {
+            try (ObjectInputStream obj = new ObjectInputStream(new FileInputStream(file))) {
                 concesionario = (Concesionario) obj.readObject();
-            } catch (Exception e) {
-                System.out.println(e);
+                System.out.println("Leído");
+            } catch (IOException | ClassNotFoundException e) {
+                System.out.println("Error al leer el archivo del concesionario: " + e.getMessage());
             }
-            obj.close();
-            System.out.println("Leído");
-        } catch (Exception e) {
-            System.out.println("No leído");
+        } else {
+            System.out.println("No hay archivo de concesionario existente. Se ha creado un concesionario nuevo.");
         }
     }
 
